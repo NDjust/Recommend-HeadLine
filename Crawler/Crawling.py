@@ -4,7 +4,6 @@ from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchAttributeException, InvalidSelectorException
 from bs4 import BeautifulSoup
 
-import pandas as pd
 import datetime
 import requests
 
@@ -23,6 +22,10 @@ def load_chrome_browser():
     browser.set_window_size(1920, 1280) # 윈도우 사이즈를 맞춰서 크롤링하기 쉽게 만들기.
 
     return browser
+
+
+def get_content(link):
+    pass
 
 
 def get_data(start, end, url):
@@ -54,6 +57,7 @@ def get_data(start, end, url):
         for tags in soup.select('div > dt > a'):
             link_.append(tags['href'])
 
+        # Top 30에 있는 본문 링크를 가져와 링크타고 본문 스크래핑.
         link2_ = '[]'.join(link_)
         link2_ = link2_.replace('https:', '')
         link3_ = link2_.split('[]')
