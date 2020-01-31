@@ -18,7 +18,7 @@ def load_chrome_browser():
     """
     chrome_options = Options()
     browser = webdriver.Chrome(
-        "./webdriver/chrome/chromedriver", options=chrome_options)
+        "./webdriver/chromedriver", options=chrome_options)
     browser.set_window_size(1920, 1280) # 윈도우 사이즈를 맞춰서 크롤링하기 쉽게 만들기.
 
     return browser
@@ -43,7 +43,6 @@ def get_data(start, end, url):
 
     for i in date_range:
         driver.get(url + i)
-
         a = driver.page_source
 
         soup = BeautifulSoup(a, 'html.parser')
