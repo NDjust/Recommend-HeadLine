@@ -10,7 +10,7 @@ def save_db(table_name, title, views, article_link, content):
     try:
         conn = pymysql.connect(host="", user="",
                                password="", db="",
-                               charset="utf8")
+                               charset="")
         print(conn.get_server_info())
 
         cursor = conn.cursor()
@@ -32,10 +32,14 @@ def save_db(table_name, title, views, article_link, content):
 
 def save_csv(title, views, article_link, content, file_name):
     data = []
+
     for i in range(len(title)):
         data.append([title[i], views[i], article_link[i], content[i]])
+    print(data)
+    if "data" not in os.listdir("./"):
+        os.mkdir("./data")
 
-    if file_name not in os.listdir("./data/"):
+    if (file_name + ".csv") not in os.listdir("./data/"):
         print("=========Generate CSV File==============")
         df = pd.DataFrame(data, columns=["title", "views", "article_link", "content"])
         df.to_csv(f'./data/{file_name}.csv', encoding="utf-8-sig", index=False)
