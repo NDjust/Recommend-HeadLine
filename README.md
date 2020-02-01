@@ -8,3 +8,4 @@ Requirements
 - pandas
 - selenium
 - bs4
+- pymysql
