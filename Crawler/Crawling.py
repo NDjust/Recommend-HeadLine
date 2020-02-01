@@ -1,5 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.common.exceptions import WebDriverException
 from bs4 import BeautifulSoup
 
 PATH = "./webdriver/chromedriver"
@@ -25,13 +26,17 @@ def get_content(link):
         :return: Article content.
         """
     driver = load_chrome_browser()
-    driver.get(link)
-    page_source = driver.page_source
-    soup = BeautifulSoup(page_source, "html.parser")
     body = ""
 
-    for content in soup.find_all("div", {"class": "par"}):
-        body += content.text
+    try:
+        driver.get(link)
+        page_source = driver.page_source
+        soup = BeautifulSoup(page_source, "html.parser")
+
+        for content in soup.find_all("div", {"class": "par"}):
+            body += content.text
+    except WebDriverException as e:
+        print(e)
 
     return body
 
@@ -63,8 +68,8 @@ def get_data(url):
         content = get_content(link)
         contents.append(content)
 
-        print(f"title: \n{link}\n")
-        print(f"title: \n{content}\n")
+        print(f"link: \n{link}\n")
+        print(f"content: \n{content}\n")
 
     return titles, views, article_link, contents
 
