@@ -46,7 +46,7 @@ def save_csv(title, views, article_link, content, file_name):
     else:
         with open(f"./data/{file_name}.csv", "w") as f:
             print("========Add data in CSV File===========")
-            writer = csv.writer(f)
+            writer = csv.writer(f, encoding="utf-8-sig")
             writer.writerows(data)
 
     return
