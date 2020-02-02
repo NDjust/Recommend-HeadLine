@@ -44,9 +44,9 @@ def save_csv(title, views, article_link, content, file_name):
         df = pd.DataFrame(data, columns=["title", "views", "article_link", "content"])
         df.to_csv(f'./data/{file_name}.csv', encoding="utf-8-sig", index=False)
     else:
-        with open(f"./data/{file_name}.csv", "w") as f:
+        with open(f"./data/{file_name}.csv", "a", encoding="utf-8") as f:
             print("========Add data in CSV File===========")
-            writer = csv.writer(f, encoding="utf-8-sig")
+            writer = csv.writer(f)
             writer.writerows(data)
 
     return
