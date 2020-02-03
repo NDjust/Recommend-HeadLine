@@ -1,20 +1,27 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from selenium.common.exceptions import WebDriverException
+from selenium.common.exceptions import WebDriverException, TimeoutException
 from bs4 import BeautifulSoup
+from saver import *
+
+import requests
+from datetime import datetime
 
 PATH = "./webdriver/chromedriver"
 
 
-def load_chrome_browser():
+def set_chrome_browser():
     """ Load chrome browser function.
 
     :return: Chrome browser Object.
     """
-    chrome_options = Options()
+    options = webdriver.ChromeOptions()
+    options.add_argument("headless")
+    options.add_argument("window-size=1920x1080")
+    options.add_argument("disable-gpu")
+
     browser = webdriver.Chrome(
-        "./webdriver/chromedriver", options=chrome_options)
-    browser.set_window_size(1920, 1280) # 윈도우 사이즈를 맞춰서 크롤링하기 쉽게 만들기.
+            "./webdriver/chromedriver", options=options)
 
     return browser
 
@@ -25,34 +32,39 @@ def get_content(link):
         :param link: Article Url.
         :return: Article content.
         """
-    driver = load_chrome_browser()
     body = ""
+    driver = set_chrome_browser()
 
     try:
         driver.get(link)
-        page_source = driver.page_source
-        soup = BeautifulSoup(page_source, "html.parser")
+        html = driver.page_source
+        soup = BeautifulSoup(html, 'html.parser')
 
         for content in soup.find_all("div", {"class": "par"}):
             body += content.text
+    except TimeoutException as e:
+        print(e)
+        return None
     except WebDriverException as e:
         print(e)
+        return None
+
+    driver.close()
 
     return body
 
 
 def get_data(url):
-    driver = load_chrome_browser()
-
+    driver = set_chrome_browser()
     titles = []
     views = []
     article_link = []
     contents = []
 
     driver.get(url)
-    a = driver.page_source
 
-    soup = BeautifulSoup(a, 'html.parser')
+    html = driver.page_source
+    soup = BeautifulSoup(html, 'html.parser')
 
     for title_tag in soup.select('dt > a > span'):
         titles.append(title_tag.text)
