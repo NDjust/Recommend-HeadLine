@@ -6,7 +6,7 @@ import csv
 import pandas as pd
 
 
-def save_db(table_name, title, views, article_link, content):
+def save_db(table_name, title, date, views, article_link, content):
     try:
         conn = pymysql.connect(host="", user="",
                                password="", db="",
@@ -19,7 +19,7 @@ def save_db(table_name, title, views, article_link, content):
 
         for i in range(len(title)):
             sql = f"insert into {table_name} values(" \
-                  f"{title[i]}, {views[i]}, {article_link[i]}, {content[i]})"
+                  f"{title[i]}, {date}, {views[i]}, {article_link[i]}, {content[i]})"
 
         cursor.execute(sql)
         conn.commit()
@@ -30,12 +30,14 @@ def save_db(table_name, title, views, article_link, content):
         print(e)
 
 
-def save_csv(title, views, article_link, content, file_name):
+def save_csv(title, views, article_link, content, date, file_name):
     data = []
 
     for i in range(len(title)):
-        data.append([title[i], views[i], article_link[i], content[i]])
+        data.append([title[i], date, views[i], article_link[i], content[i]])
+
     print(data)
+
     if "data" not in os.listdir("./"):
         os.mkdir("./data")
 
