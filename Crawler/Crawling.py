@@ -1,20 +1,37 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.common.exceptions import WebDriverException
+from selenium.common.exceptions import WebDriverException, TimeoutException
 from bs4 import BeautifulSoup
+from saver import *
+from selenium import webdriver
 
 PATH = "./webdriver/chromedriver"
 
 
-def load_chrome_browser():
+def set_chrome_browser():
     """ Load chrome browser function.
 
     :return: Chrome browser Object.
     """
-    chrome_options = Options()
-    browser = webdriver.Chrome(
-        "./webdriver/chromedriver", options=chrome_options)
-    browser.set_window_size(1920, 1280) # 윈도우 사이즈를 맞춰서 크롤링하기 쉽게 만들기.
+    options = webdriver.ChromeOptions()
+    options.add_argument("headless")
+    options.add_argument("window-size=1920x1080")
+    options.add_argument("disable-gpu")
+    options.add_argument('headless')  # headless 모드 설정
+    options.add_argument("disable-infobars")
+    options.add_argument("--disable-extensions")
+
+    # 속도 향상을 위한 옵션 해제
+    prefs = {'profile.default_content_setting_values': {'cookies': 2, 'images': 2, 'plugins': 2, 'popups': 2,
+                                                        'geolocation': 2, 'notifications': 2,
+                                                        'auto_select_certificate': 2, 'fullscreen': 2, 'mouselock': 2,
+                                                        'mixed_script': 2, 'media_stream': 2, 'media_stream_mic': 2,
+                                                        'media_stream_camera': 2, 'protocol_handlers': 2,
+                                                        'ppapi_broker': 2, 'automatic_downloads': 2, 'midi_sysex': 2,
+                                                        'push_messaging': 2, 'ssl_cert_decisions': 2,
+                                                        'metro_switch_to_desktop': 2, 'protected_media_identifier': 2,
+                                                        'app_banner': 2, 'site_engagement': 2, 'durable_storage': 2}}
+    options.add_experimental_option('prefs', prefs)
+
+    browser = webdriver.Chrome(PATH, options=options)
 
     return browser
 
@@ -25,34 +42,39 @@ def get_content(link):
         :param link: Article Url.
         :return: Article content.
         """
-    driver = load_chrome_browser()
     body = ""
+    driver = set_chrome_browser()
 
     try:
         driver.get(link)
-        page_source = driver.page_source
-        soup = BeautifulSoup(page_source, "html.parser")
+        html = driver.page_source
+        soup = BeautifulSoup(html, 'html.parser')
 
         for content in soup.find_all("div", {"class": "par"}):
             body += content.text
+    except TimeoutException as e:
+        print(e)
+        return None
     except WebDriverException as e:
         print(e)
+        return None
+
+    driver.close()
 
     return body
 
 
 def get_data(url):
-    driver = load_chrome_browser()
-
+    driver = set_chrome_browser()
     titles = []
     views = []
     article_link = []
     contents = []
 
     driver.get(url)
-    a = driver.page_source
 
-    soup = BeautifulSoup(a, 'html.parser')
+    html = driver.page_source
+    soup = BeautifulSoup(html, 'html.parser')
 
     for title_tag in soup.select('dt > a > span'):
         titles.append(title_tag.text)
