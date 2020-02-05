@@ -6,6 +6,34 @@ import csv
 import pandas as pd
 
 
+def create_table():
+
+    try:
+        conn = pymysql.connect(host="", user="",
+                               password="", db="",
+                               charset="utf8")
+        print(conn.get_server_info())
+
+        cursor = conn.cursor()
+
+        sql = "create table chosun_news(" \
+              "title varchar(100)," \
+              "date varchar(100)," \
+              "content text," \
+              "views int," \
+              "link varchar(150)," \
+              "primary key (title))"
+
+        cursor.execute(sql)
+        conn.commit()
+        conn.close()
+
+    except Error as e:
+        print(e)
+
+    return
+
+
 def save_db(table_name, title, date, views, article_link, content):
     try:
         conn = pymysql.connect(host="", user="",
