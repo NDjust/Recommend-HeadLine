@@ -18,7 +18,7 @@ def create_table():
 
         sql = "create table chosun_news(" \
               "title varchar(100)," \
-              "date varchar(100)," \
+              "created_date varchar(100)," \
               "content text," \
               "views int," \
               "link varchar(150)," \
@@ -46,11 +46,11 @@ def save_db(table_name, title, date, views, article_link, content):
         print("\nSave data in DB")
 
         for i in range(len(title)):
-            sql = f"insert into {table_name} values(" \
-                  f"{title[i]}, {date}, {views[i]}, {article_link[i]}, {content[i]})"
+            sql = "insert into {} values(" \
+                  "%s, %s, %s, %s, %s)".format(table_name)
 
-        cursor.execute(sql)
-        conn.commit()
+            cursor.execute(sql, title[i], date, views[i], article_link[i], content[i])
+            conn.commit()
 
         conn.close()
 
