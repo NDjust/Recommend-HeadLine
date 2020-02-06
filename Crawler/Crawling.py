@@ -93,5 +93,8 @@ def get_data(url):
         print(f"link: \n{link}\n")
         print(f"content: \n{content}\n")
 
+    # convert views string to int
+    views = list(map(lambda x: int("".join(x.split(","))), views))
+
     return titles, views, article_link, contents
 

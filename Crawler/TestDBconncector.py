@@ -12,6 +12,7 @@ try:
 
     sql = "create table chosun_news(" \
           "title varchar(100)," \
+          "created_date varchar(100)," \
           "content text," \
           "views int," \
           "link varchar(150)," \

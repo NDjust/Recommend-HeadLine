@@ -33,4 +33,5 @@ def main(save_method):
 
 if __name__ == '__main__':
     print("Select saver type(csv or db): ")
-    main()
+    save_type = input()
+    main(save_type)
