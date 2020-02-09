@@ -9,3 +9,4 @@ Requirements
 - selenium
 - bs4
 - pymysql
+- konlpy
