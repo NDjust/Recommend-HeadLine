@@ -103,6 +103,7 @@ class TextPreProcessor(object):
     @staticmethod
     def review_to_sentences(text: list, remove_stopwords=False) -> list:
         """ 불용어 및 전처리 된 문장 데이터를 만들어 주는 함수.
+
         :param text: input review or text data.
         :return: sentences
         """
