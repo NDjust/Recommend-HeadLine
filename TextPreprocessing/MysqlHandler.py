@@ -4,7 +4,7 @@ import pymysql
 import pandas as pd
 
 
-class MysqlLoader:
+class MysqlHandler:
 
     def __init__(self, host, user, password, port) -> None:
         self.host = host
