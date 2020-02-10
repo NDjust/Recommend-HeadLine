@@ -51,6 +51,12 @@ def get_content(link):
         soup = BeautifulSoup(html, 'html.parser')
 
         for content in soup.find_all("div", {"class": "par"}):
+            # [s.extract() for s in content("제거할 태그"})]
+            # 해당 태그 삭제
+            [s.extract() for s in content("script")]
+            [s.extract() for s in content("span")]
+            [s.extract() for s in content("a", {"target": "_blank"})]
+
             body += content.text
     except TimeoutException as e:
         print(e)

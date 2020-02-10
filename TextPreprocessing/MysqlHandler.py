@@ -4,7 +4,7 @@ import pymysql
 import pandas as pd
 
 
-class MysqlLoader:
+class MysqlHandler:
 
     def __init__(self, host, user, password, port) -> None:
         self.host = host
@@ -56,6 +56,8 @@ class MysqlLoader:
             for row in record:
                 for i in range(len(column_names)):
                     print(f"{column_names[i]} = {row[i]}")
+
+            return record
 
         else:
             print("DB is not Connected")
