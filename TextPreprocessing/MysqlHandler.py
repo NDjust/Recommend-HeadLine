@@ -57,6 +57,8 @@ class MysqlHandler:
                 for i in range(len(column_names)):
                     print(f"{column_names[i]} = {row[i]}")
 
+            return record
+
         else:
             print("DB is not Connected")
 
