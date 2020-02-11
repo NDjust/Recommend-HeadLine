@@ -30,7 +30,7 @@ class TextPreProcessor(object):
         return stop_words
 
     @staticmethod
-    def review_to_wordlist(text: str, remove_stopwords=False, pos_presence=True) -> list:
+    def text_to_wordlist(text: str, remove_stopwords=False, pos_presence=True) -> list:
         """ 텍스트 데이터 전처리 함수.
 
         :param review: input review or text data.
@@ -38,14 +38,16 @@ class TextPreProcessor(object):
         :return:
         """
         # 1. 특수문자를 공백으로 바꿔줌
-        review_text = re.sub("[^가-힣-ㄱ-ㅎㅏ-ㅣ\\s]", " ", text)
+        special = re.compile("[^가-힣-ㄱ-ㅎㅏ-ㅣ\\s]", flags=re.UNICODE)
+        text = special.sub(r"", text)
+        text = TextPreProcessor.remove_emoji(text)
 
         # 3. 어간추출 (konlpy okt tokenize 사용)
         okt = Okt()
         if pos_presence:
             words = okt.pos(text, stem=True)
         else:
-            words = okt.morphs(review_text, stem=True)
+            words = okt.morphs(text, stem=True)
 
         # 4. 불용어 목록 가져오기
         stop_words = TextPreProcessor.__get_stop_words()
@@ -54,11 +56,12 @@ class TextPreProcessor(object):
         if remove_stopwords:
             words = [w for w in words if not w in stop_words]
 
+        print(words)
         # 6. 리스트 형태로 반환
         return words
 
     @staticmethod
-    def review_to_pos_words(text: list, remove_stopwords=False) -> list:
+    def text_to_pos_words(text: list, remove_stopwords=False) -> list:
         """
 
         :param text: 텍스트 데이터
@@ -88,20 +91,20 @@ class TextPreProcessor(object):
         return result
 
     @staticmethod
-    def review_to_join_words(text: list, remove_stopwords=False) -> str:
+    def text_to_join_words(text: list, remove_stopwords=False) -> str:
         """ word 단위로 토큰화 된 text 데이터를 합쳐주는 함수.
 
         :param text: input review or text data.
         :return: Tokenized sentences
         """
-        words = TextPreProcessor.review_to_wordlist(\
+        words = TextPreProcessor.text_to_wordlist(\
             text, remove_stopwords=False)
         join_words = ' '.join(words)
         return join_words
 
 
     @staticmethod
-    def review_to_sentences(text: list, remove_stopwords=False) -> list:
+    def text_to_sentences(text: list, remove_stopwords=False) -> list:
         """ 불용어 및 전처리 된 문장 데이터를 만들어 주는 함수.
 
         :param text: input review or text data.
@@ -119,7 +122,7 @@ class TextPreProcessor(object):
             if len(raw_sentence) > 0:
                 # 태그제거, 알파벳문자가 아닌 것은 공백으로 치환, 불용어제거
                 sentences.append(\
-                    TextPreProcessor.review_to_wordlist(\
+                    TextPreProcessor.text_to_wordlist(\
                     raw_sentence, remove_stopwords))
         return sentences
 
