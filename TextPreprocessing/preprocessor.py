@@ -38,25 +38,24 @@ class TextPreProcessor(object):
         :return:
         """
         # 1. 특수문자를 공백으로 바꿔줌
-        special = re.compile("[^가-힣-ㄱ-ㅎㅏ-ㅣ\\s]", flags=re.UNICODE)
-        text = special.sub(r"", text)
         text = TextPreProcessor.remove_emoji(text)
+
+        # 2. 불용어 목록 가져오기
+        stop_words = TextPreProcessor.__get_stop_words()
 
         # 3. 어간추출 (konlpy okt tokenize 사용)
         okt = Okt()
         if pos_presence:
             words = okt.pos(text, stem=True)
+            # 4. 불용어 제거
+            if remove_stopwords:
+                words = [w for w in words if not w[0] in stop_words]
         else:
             words = okt.morphs(text, stem=True)
+            # 4. 불용어 제거
+            if remove_stopwords:
+                words = [w for w in words if not w in stop_words]
 
-        # 4. 불용어 목록 가져오기
-        stop_words = TextPreProcessor.__get_stop_words()
-
-        # 5. 불용어 제거
-        if remove_stopwords:
-            words = [w for w in words if not w in stop_words]
-
-        print(words)
         # 6. 리스트 형태로 반환
         return words
 
