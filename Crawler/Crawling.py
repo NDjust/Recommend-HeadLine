@@ -40,7 +40,7 @@ def set_chrome_browser():
     return browser
 
 
-def apply_multiprocessing(data, func, **kwargs) -> list:
+def apply_multiprocessing(func, data, **kwargs) -> list:
     workers = kwargs.pop("workers")
 
     pool = Pool(processes=workers)
@@ -109,7 +109,7 @@ def get_data(url):
         print(f"link: \n{link}\n")
 
     # 병렬처리
-    contents = apply_multiprocessing(get_content, article_link)
+    contents = apply_multiprocessing(get_content, article_link, workers=4)
 
     # convert views string to int
     views = list(map(lambda x: int("".join(x.split(","))), views))
