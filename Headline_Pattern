@@ -31,9 +31,8 @@ for row in range(len(data)):
 
 # 이중리스트를 1차원으로 변환
 data2 = np.array(data).flatten().tolist()
-data3 = pd.DataFrame(data)
 
-# n-gram으로 만들기
+# n-gram 생성하는 함수 생성
 def to_ngrams(words, n):
     ngrams = []
     for b in range(0, len(words) - n + 1):
