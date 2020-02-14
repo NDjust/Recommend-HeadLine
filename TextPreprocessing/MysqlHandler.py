@@ -28,20 +28,22 @@ class MysqlHandler:
 
         return self
 
-    def mysql_to_csv(self, sql: str, file_path: str) -> pd.DataFrame:
+    def mysql_to_df(self, sql: str, save=False, file_path=None) -> pd.DataFrame:
         if self.session is not None:
             conn = self.session
 
             df = pd.read_sql(sql, conn)
-            df.to_csv(file_path, encoding='utf-8-sig', header=True, \
-                      doublequote=True, sep=',', index=False)
-            print('File, {}, has been created successfully'.format(file_path))
+
+            if save:
+                df.to_csv(file_path, encoding='utf-8-sig', header=True, \
+                          doublequote=True, sep=',', index=False)
+                print('File, {}, has been created successfully'.format(file_path))
 
             return df
         else:
             print("DB is Not Connected")
 
-    def view_data(self, sql: str, db_table: str) -> None:
+    def get_data(self, sql: str, db_table: str) -> list:
         if self.session is not None:
             conn = self.session
 

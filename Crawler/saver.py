@@ -49,7 +49,7 @@ def save_db(table_name, title, date, views, article_link, content):
             sql = "insert into {} values(" \
                   "%s, %s, %s, %s, %s)".format(table_name)
 
-            cursor.execute(sql, title[i], date, views[i], article_link[i], content[i])
+            cursor.execute(sql, (title[i], date, views[i], article_link[i], content[i]))
             conn.commit()
 
         conn.close()

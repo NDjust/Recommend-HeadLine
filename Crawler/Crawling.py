@@ -2,6 +2,10 @@ from selenium.common.exceptions import WebDriverException, TimeoutException
 from bs4 import BeautifulSoup
 from saver import *
 from selenium import webdriver
+from requests.exceptions import Timeout, RequestException
+from multiprocessing import Pool
+
+import requests
 
 PATH = "./webdriver/chromedriver"
 
@@ -36,19 +40,29 @@ def set_chrome_browser():
     return browser
 
 
-def get_content(link):
+def apply_multiprocessing(func, data, **kwargs) -> list:
+    workers = kwargs.pop("workers")
+
+    pool = Pool(processes=workers)
+    result = pool.map(func, data)
+    pool.close()
+
+    return result
+
+
+def get_content(link) -> str:
     """ Get Article content.
 
         :param link: Article Url.
         :return: Article content.
         """
     body = ""
-    driver = set_chrome_browser()
 
     try:
-        driver.get(link)
-        html = driver.page_source
-        soup = BeautifulSoup(html, 'html.parser')
+        response = requests.get(link)
+        response.encoding = None
+        html = response.text
+        soup = BeautifulSoup(html, "html.parser")
 
         for content in soup.find_all("div", {"class": "par"}):
             # [s.extract() for s in content("제거할 태그"})]
@@ -58,15 +72,14 @@ def get_content(link):
             [s.extract() for s in content("a", {"target": "_blank"})]
 
             body += content.text
-    except TimeoutException as e:
+    except Timeout as e:
         print(e)
         return None
-    except WebDriverException as e:
+    except RequestException as e:
         print(e)
         return None
 
-    driver.close()
-
+    print(f"content: \n{body}\n")
     return body
 
 
@@ -93,11 +106,10 @@ def get_data(url):
     for link_tag in soup.select('div > dt > a'):
         link = "https:" + link_tag["href"]
         article_link.append(link)
-        content = get_content(link)
-        contents.append(content)
-
         print(f"link: \n{link}\n")
-        print(f"content: \n{content}\n")
+
+    # 병렬처리
+    contents = apply_multiprocessing(get_content, article_link, workers=4)
 
     # convert views string to int
     views = list(map(lambda x: int("".join(x.split(","))), views))
