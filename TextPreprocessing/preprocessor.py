@@ -9,7 +9,6 @@ class TextPreProcessor(object):
     @staticmethod
     def __get_stop_words():
         """ 한국어 불용어 리스트 가져오기.
-
         영어는 nltk안에 내장된 불용어 리스트가 있지만
         한국어의 경우 없기 때문에 자료를 다운 받아 사용.
         Reference - https://bab2min.tistory.com/544
@@ -48,7 +47,6 @@ class TextPreProcessor(object):
     @staticmethod
     def review_to_wordlist(text: str, tokenizer, remove_stopwords=False, pos_presence=True) -> list:
         """ 텍스트 데이터 전처리 함수.
-
         :param review: input review or text data.
         :param remove_stopwords: whether remove stopwords
         :return:
@@ -77,7 +75,6 @@ class TextPreProcessor(object):
     @staticmethod
     def review_to_pos_words(text: str, tokenizer, remove_stopwords=False) -> list:
         """
-
         :param text: 텍스트 데이터
         :param remove_stopwords: 불용어 처리 여부.
         :return: 전처리된 텍스트 데이터
@@ -108,7 +105,6 @@ class TextPreProcessor(object):
     @staticmethod
     def review_to_join_words(text: str, remove_stopwords=False) -> str:
         """ word 단위로 토큰화 된 text 데이터를 합쳐주는 함수.
-
         :param text: input review or text data.
         :return: Tokenized sentences
         """
@@ -120,7 +116,6 @@ class TextPreProcessor(object):
     @staticmethod
     def review_to_sentences(text: str, tokenizer, remove_stopwords=False) -> list:
         """ 불용어 및 전처리 된 문장 데이터를 만들어 주는 함수.
-
         :param text: input review or text data.
         :return: sentences
         """
@@ -143,7 +138,6 @@ class TextPreProcessor(object):
     @staticmethod
     def remove_emoji(text: str):
         """ Remove emoji data.
-
         :param df: dataframe
         :return: remove emoji
         """
