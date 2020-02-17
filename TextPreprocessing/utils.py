@@ -1,6 +1,6 @@
 from multiprocessing import Pool
-from .preprocessor import TextPreProcessor
-from .MysqlHandler import MysqlHandler
+from preprocessor import TextPreProcessor
+from MysqlHandler import MysqlHandler
 
 import pandas as pd
 import numpy as np
@@ -8,9 +8,9 @@ import pickle
 
 
 def get_clean_df(sql: str, handler: MysqlHandler) -> pd.DataFrame:
-    with handler as h:
+    with handler:
         print("Load data in mysql")
-        df = h.mysql_to_df(sql)
+        df = handler.mysql_to_df(sql)
 
     if df is None:
         return None
@@ -20,14 +20,15 @@ def get_clean_df(sql: str, handler: MysqlHandler) -> pd.DataFrame:
     return df
 
 
-def fit_processor(data, func, workers=4) -> list:
+def fit_processor(data, func, **kwargs) -> list:
     # convert data type
     data = list(np.asarray(data))
-
     print("Cleansing Text data")
+
     # preprocessing by us multiprocessing
     data = TextPreProcessor.apply_by_multiprocessing(
-        data=data, func=func, workers=workers
+        data=data, func=func, tokenizer=kwargs.pop('tokenizer'),
+        stopwords=kwargs.pop("stopwords"), workers=kwargs.pop("workers")
     )
 
     return data
@@ -42,7 +43,7 @@ def apply_by_multiprocessor(data, func, **kwargs):
     return result
 
 
-def handle_pickle(data, file_name_path, is_save=False):
+def handle_pickle(file_name_path, data=None, is_save=False):
     if is_save:
         print("Save Data to Pickle")
         with open(file_name_path, mode="wb") as f:
