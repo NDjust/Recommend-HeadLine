@@ -1,5 +1,6 @@
 from konlpy.tag import Okt, Kkma, Mecab, Hannanum
 from multiprocessing import Pool
+from functools import partial
 
 import re
 
@@ -46,7 +47,7 @@ class TextPreProcessor(object):
         return tokenizer
 
     @staticmethod
-    def review_to_wordlist(text: str, tokenizer, remove_stopwords=False, pos_presence=True) -> list:
+    def text_to_wordlist(text: str, tokenizer, remove_stopwords=False, pos_presence=True) -> list:
         """ 텍스트 데이터 전처리 함수.
 
         :param review: input review or text data.
@@ -54,28 +55,34 @@ class TextPreProcessor(object):
         :return:
         """
         # 1. 특수문자를 공백으로 바꿔줌
-        review_text = re.sub("[^가-힣-ㄱ-ㅎㅏ-ㅣ\\s]", " ", text)
+        text = re.sub("[^가-힣-ㄱ-ㅎㅏ-ㅣ\\s]", " ", text)
+        text = TextPreProcessor.remove_emoji(text)
 
-        # 3. 어간추출 (konlpy okt tokenize 사용)
         tokenizer = TextPreProcessor.__select_tokenize(tokenizer)
 
-        if pos_presence:
-            words = tokenizer.pos(text, stem=True)
+        if tokenizer == "okt":
+            if pos_presence:
+                words = tokenizer.pos(text, stem=True)
+            else:
+                words = tokenizer.morphs(text, stem=True)
         else:
-            words = tokenizer.morphs(review_text, stem=True)
+            if pos_presence:
+                words = tokenizer.pos(text)
+            else:
+                words = tokenizer.morphs(text)
 
-        # 4. 불용어 목록 가져오기
+        # 2. 불용어 목록 가져오기
         stop_words = TextPreProcessor.__get_stop_words()
 
-        # 5. 불용어 제거
+        # 3. 불용어 제거
         if remove_stopwords:
             words = [w for w in words if not w in stop_words]
 
-        # 6. 리스트 형태로 반환
+        # 4. 리스트 형태로 반환
         return words
 
     @staticmethod
-    def review_to_pos_words(text: str, tokenizer, remove_stopwords=False) -> list:
+    def text_to_pos_words(text: str, tokenizer, remove_stopwords=False) -> list:
         """
 
         :param text: 텍스트 데이터
@@ -85,19 +92,19 @@ class TextPreProcessor(object):
         # 1. 특수문자를 공백으로 바꿔줌
         text = re.sub("[^가-힣-ㄱ-ㅎㅏ-ㅣ\\s]", " ", text)
 
-        # 3. 어간추출 (konlpy okt tokenize 사용)
+        # 2. 어간추출 (konlpy tokenize 사용)
         tokenizer = TextPreProcessor.__select_tokenize(tokenizer)
 
         words = tokenizer.pos(text, stem=True, norm=True)
 
-        # 4. 불용어 목록 가져오기
+        # 3. 불용어 목록 가져오기
         stop_words = TextPreProcessor.__get_stop_words()
 
-        # 5. 불용어 제거
+        # 4. 불용어 제거
         if remove_stopwords:
             words = [w for w in words if not w in stop_words]
 
-        # 6. 동사, 명사만 추출.
+        # 5. 동사, 명사만 추출.
         result = []
         for w in words:
             if w[1] in ["Noun", "Verb"]:
@@ -106,7 +113,7 @@ class TextPreProcessor(object):
         return result
 
     @staticmethod
-    def review_to_join_words(text: str, remove_stopwords=False) -> str:
+    def text_to_join_words(text: str, remove_stopwords=False) -> str:
         """ word 단위로 토큰화 된 text 데이터를 합쳐주는 함수.
 
         :param text: input review or text data.
@@ -118,7 +125,7 @@ class TextPreProcessor(object):
         return join_words
 
     @staticmethod
-    def review_to_sentences(text: str, tokenizer, remove_stopwords=False) -> list:
+    def text_to_sentences(text: str, tokenizer, remove_stopwords=False) -> list:
         """ 불용어 및 전처리 된 문장 데이터를 만들어 주는 함수.
 
         :param text: input review or text data.
@@ -152,12 +159,22 @@ class TextPreProcessor(object):
 
     @staticmethod
     def apply_by_multiprocessing(data: list, func, **kwargs) -> list:
-        # 키워드 항목 중 workers 파라메터를 꺼냄
+        # 키워드 파라메터를 꺼냄
         workers = kwargs.pop('workers')
+        tokenizer = kwargs.pop("tokenizer")
+        stopwords = kwargs.pop("stopwords")
 
         pool = Pool(processes=workers)
-        # 실행할 함수와 데이터프레임을 워커의 수 만큼 나눠 작업
+
+        if type(tokenizer) == str and stopwords:
+            func = partial(func, tokenizer=tokenizer, remove_stopwords=stopwords)
+        elif type(tokenizer) == str:
+            func = partial(func, tokenizer=tokenizer)
+        elif stopwords:
+            func = partial(func, remove_stopwords=stopwords)
+
         result = pool.map(func, data)
         pool.close()
+        pool.join()
 
         return result
