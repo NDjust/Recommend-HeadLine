@@ -47,18 +47,10 @@ class MysqlHandler:
         if self.session is not None:
             conn = self.session
 
-            cursor = conn.cursour()
-            cursor.execute(f"SHOW columns FROM {db_table}")
-            column_names = [col[0] for col in cursor.fetchall()]
-
+            cursor = conn.cursor()
             cursor.execute(sql)
 
             record = cursor.fetchall()
-
-            for row in record:
-                for i in range(len(column_names)):
-                    print(f"{column_names[i]} = {row[i]}")
-
             return record
 
         else:
