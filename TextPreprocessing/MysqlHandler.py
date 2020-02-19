@@ -33,6 +33,7 @@ class MysqlHandler:
             conn = self.session
 
             df = pd.read_sql(sql, conn)
+            df = df.dropna()
 
             if save:
                 df.to_csv(file_path, encoding='utf-8-sig', header=True, \
@@ -43,7 +44,7 @@ class MysqlHandler:
         else:
             print("DB is Not Connected")
 
-    def get_data(self, sql: str, db_table: str) -> list:
+    def get_data(self, sql: str) -> list:
         if self.session is not None:
             conn = self.session
 
