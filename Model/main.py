@@ -1,7 +1,7 @@
 from TextPreprocessing.MysqlHandler import MysqlHandler
 from TextSummarizer import TextRank
 from multiprocessing import Pool
-from .utils import convert_data, apply_by_multiprocessor, get_data
+from utils import add_summary_sentence, apply_by_multiprocessor, get_data
 from TextPreprocessing.preprocessor import TextPreProcessor
 
 import numpy as np
@@ -25,6 +25,14 @@ target_table = ""
 
 
 def make_dict(handler, sql, save=False, path=None):
+    """ Make dictionary.
+
+    :param handler: MySql Handler
+    :param sql: sql query
+    :param save: save existence.
+    :param path: save path
+    :return: data word dictionary
+    """
     dic = dict()
 
     data = get_data(data_handler=handler, sql=sql)
@@ -47,7 +55,12 @@ def make_dict(handler, sql, save=False, path=None):
     return dic
 
 
-def save_data(path=None):
+def save_data(path=None) -> list:
+    """ Save title, content, summary sentences data.
+
+    :param path: save path
+    :return: [title, content, summary_sentences] data
+    """
     for start, end in date:
         # get title
         sql = f"select title, content from {DB_TABLE_1} " \
@@ -63,7 +76,7 @@ def save_data(path=None):
         print(df.shape)
 
         data = [[title[i], content[i]] for i in range(df.shape[0]) if i != 6140]
-        result = apply_by_multiprocessor(data=data, func=convert_data, workers=4)
+        result = apply_by_multiprocessor(data=data, func=add_summary_sentence, workers=4)
 
         with open(path, mode="wb") as f:
             pickle.dump(result, f)
