@@ -20,6 +20,13 @@ trained_model = Word2Vec.load("path")
 
 
 def train_data(save=False, path=None):
+    """ Word2Vec transfer learning by using collected data.
+
+    Trained Model Reference - https://github.com/Kyubyong/wordvectors
+    :param save: save existence.
+    :param path: save path.
+    :return: transfer trained model.
+    """
 
     for start, end in date:
         print(f"Start {start} date")

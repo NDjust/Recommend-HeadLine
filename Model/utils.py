@@ -13,7 +13,12 @@ def clean_text(data):
     return text
 
 
-def convert_data(data):
+def add_summary_sentence(data) -> list:
+    """ add summary data.
+
+    :param data: [title, content] list data
+    :return: [title, content, summary_sentences] list data
+    """
     title = data[0]
     content = data[1]
     content = clean_text(content)
@@ -27,6 +32,12 @@ def convert_data(data):
 
 
 def get_data(data_handler, sql):
+    """ Get data about the sql query.
+
+    :param data_handler: sql handler
+    :param sql: sql query
+    :return: data(about the sql query).
+    """
     with data_handler:
         data = data_handler.get_data(sql=sql)
 
