@@ -33,6 +33,7 @@ class MysqlHandler:
             conn = self.session
 
             df = pd.read_sql(sql, conn)
+            df = df.dropna()
 
             if save:
                 df.to_csv(file_path, encoding='utf-8-sig', header=True, \
@@ -43,22 +44,14 @@ class MysqlHandler:
         else:
             print("DB is Not Connected")
 
-    def get_data(self, sql: str, db_table: str) -> list:
+    def get_data(self, sql: str) -> list:
         if self.session is not None:
             conn = self.session
 
-            cursor = conn.cursour()
-            cursor.execute(f"SHOW columns FROM {db_table}")
-            column_names = [col[0] for col in cursor.fetchall()]
-
+            cursor = conn.cursor()
             cursor.execute(sql)
 
             record = cursor.fetchall()
-
-            for row in record:
-                for i in range(len(column_names)):
-                    print(f"{column_names[i]} = {row[i]}")
-
             return record
 
         else:
