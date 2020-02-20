@@ -1,7 +1,6 @@
 from multiprocessing import Pool
 from functools import partial
 from TextSummarizer import TextRank
-from TextPreprocessing.preprocessor import TextPreProcessor
 
 import re
 
@@ -42,9 +41,10 @@ def get_data(data_handler, sql):
         data = data_handler.get_data(sql=sql)
 
     try:
-        data = [d[0] for d in data if d[0] is not None]
+        data = data
     except:
         return None
+
 
     return data
 
@@ -63,3 +63,16 @@ def apply_by_multiprocessor(data, func, **kwargs):
     pool.join()
 
     return result
+
+
+if __name__ == '__main__':
+    from TextPreprocessing.MysqlHandler import MysqlHandler
+    from pprint import pprint
+    handler = MysqlHandler(host="svclaw.ipdisk.co.kr",
+                           user="skeks463", password="skeks463",
+                           port=8005)
+    sql = "select * from kpng.enter_news " \
+          "where created_date = 20190101"
+
+    pprint(get_data(handler, sql))
+    pprint(len(get_data(handler, sql)[0]))
