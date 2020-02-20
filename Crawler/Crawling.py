@@ -88,7 +88,6 @@ def get_data(url):
     titles = []
     views = []
     article_link = []
-    contents = []
 
     driver.get(url)
 
