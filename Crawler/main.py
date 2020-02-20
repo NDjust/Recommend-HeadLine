@@ -4,10 +4,10 @@ from saver import *
 import datetime
 
 
-URL = "http://news.chosun.com/ranking/list.html?type=&site=www&scode=star&term=&date="
-START = datetime.datetime.strptime("20190201", "%Y%m%d")
-END = datetime.datetime.strptime("20190301", "%Y%m%d")
-TABLE_NAME = "chosun_news"
+URL = "https://news.chosun.com/ranking/list.html?type=&site=www&scode=editorials&term=&date="
+START = datetime.datetime.strptime("20191101", "%Y%m%d")
+END = datetime.datetime.strptime("20200201", "%Y%m%d")
+TABLE_NAME = ""
 
 
 def main(save_method):
@@ -21,12 +21,18 @@ def main(save_method):
     for date in date_range:
         url = URL + date
         title, views, article_link, content = get_data(url)
+
         if save_method == "csv":
             print("Saver Type CSV")
-            save_csv(title, views, article_link, content, date, "chosun_news_to_19_01_from_19_03")
+            save_csv(title=title, date=date, views=views,
+                     article_link=article_link, content=content,
+                     file_name=f"{TABLE_NAME}_to_{START}_from_{END}")
+
         elif save_method == "db":
             print("Saver Type db in mysql")
-            save_db(TABLE_NAME, title, date, views, article_link, content)
+            save_db(table_name=TABLE_NAME, title=title,
+                    date=date, views=views,
+                    article_link=article_link, content=content)
 
     return
 
