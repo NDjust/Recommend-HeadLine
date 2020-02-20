@@ -57,7 +57,7 @@ def transfer_word2vec(trained_model, corpus):
 def train_data(sql, transfer=False, save=False, path=None):
     """ Word2Vec transfer learning by using collected data.
 
-    Trained Vectorizing Reference - https://github.com/Kyubyong/wordvectors
+    Trained Vectorization Reference - https://github.com/Kyubyong/wordvectors
     :param save: save existence.
     :param path: save path.
     :return: transfer trained model.
