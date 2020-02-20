@@ -1,6 +1,7 @@
 from multiprocessing import Pool
 from functools import partial
 from TextSummarizer import TextRank
+from TextPreprocessing.preprocessor import TextPreProcessor
 
 import re
 
@@ -45,6 +46,16 @@ def get_data(data_handler, sql):
     except:
         return None
 
+    return data
+
+
+def get_corpus(data) -> list:
+    print("Convert data to corpus data")
+
+    data = TextPreProcessor.apply_by_multiprocessing(
+        func=TextPreProcessor.text_to_wordlist, data=data,
+        workers=4, stopwords=True, tokenizer="okt"
+    )
 
     return data
 
@@ -63,16 +74,3 @@ def apply_by_multiprocessor(data, func, **kwargs):
     pool.join()
 
     return result
-
-
-if __name__ == '__main__':
-    from TextPreprocessing.MysqlHandler import MysqlHandler
-    from pprint import pprint
-    handler = MysqlHandler(host="svclaw.ipdisk.co.kr",
-                           user="skeks463", password="skeks463",
-                           port=8005)
-    sql = "select * from kpng.enter_news " \
-          "where created_date = 20190101"
-
-    pprint(get_data(handler, sql))
-    pprint(len(get_data(handler, sql)[0]))
