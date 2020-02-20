@@ -6,23 +6,15 @@ import csv
 import pandas as pd
 
 
-def create_table():
+def create_table(sql):
 
     try:
         conn = pymysql.connect(host="", user="",
-                               password="", db="",
+                               password="",
                                charset="utf8")
         print(conn.get_server_info())
 
         cursor = conn.cursor()
-
-        sql = "create table chosun_news(" \
-              "title varchar(100)," \
-              "created_date varchar(100)," \
-              "content text," \
-              "views int," \
-              "link varchar(150)," \
-              "primary key (title))"
 
         cursor.execute(sql)
         conn.commit()
@@ -37,8 +29,8 @@ def create_table():
 def save_db(table_name, title, date, views, article_link, content):
     try:
         conn = pymysql.connect(host="", user="",
-                               password="", db="",
-                               charset="")
+                               password="",
+                               charset="utf8", port=None)
         print(conn.get_server_info())
 
         cursor = conn.cursor()
@@ -58,7 +50,7 @@ def save_db(table_name, title, date, views, article_link, content):
         print(e)
 
 
-def save_csv(title, views, article_link, content, date, file_name):
+def save_csv(title, date, views, article_link, content, file_name):
     data = []
 
     for i in range(len(title)):
@@ -71,7 +63,7 @@ def save_csv(title, views, article_link, content, date, file_name):
 
     if (file_name + ".csv") not in os.listdir("./data/"):
         print("=========Generate CSV File==============")
-        df = pd.DataFrame(data, columns=["title", "views", "article_link", "content"])
+        df = pd.DataFrame(data, columns=["title", "date", "views", "article_link", "content"])
         df.to_csv(f'./data/{file_name}.csv', encoding="utf-8-sig", index=False)
     else:
         with open(f"./data/{file_name}.csv", "a", encoding="utf-8") as f:
