@@ -22,9 +22,9 @@ def main():
 
         df = get_clean_df(sql, handler)
 
-        clean_title = fit_processor(df["title"], func=TextPreProcessor.review_to_wordlist,
+        clean_title = fit_processor(df["title"], func=TextPreProcessor.text_to_wordlist,
                                     workers=4, tokenizer="mecab", stopwords=True)
-        clean_content = fit_processor(df["content"], func=TextPreProcessor.review_to_wordlist,
+        clean_content = fit_processor(df["content"], func=TextPreProcessor.text_to_wordlist,
                                       workers=4, tokenizer="mecab", stopwords=True)
         data = [[clean_title[i], clean_content[i]] for i in range(len(clean_content))]
 
