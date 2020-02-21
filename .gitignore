@@ -3,3 +3,5 @@ __pycache__/
 *__pycache__*
 *.pyc
 *.ipynb_checkpoints*
+*.idea*
+*.DS_Store*
