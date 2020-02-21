@@ -94,12 +94,13 @@ def get_data(data_handler, sql):
     return data
 
 
-def get_corpus(data) -> list:
+def get_corpus(data: list) -> list:
     print("Convert data to corpus data")
 
     data = TextPreProcessor.apply_by_multiprocessing(
         func=TextPreProcessor.text_to_wordlist, data=data,
-        workers=4, stopwords=True, tokenizer="okt"
+        workers=4, stopwords=True, tokenizer="okt",
+        pos_presence=False
     )
 
     return data

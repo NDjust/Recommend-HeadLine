@@ -1,6 +1,7 @@
 from gensim.models import Word2Vec, Phrases
 from gensim.models import TfidfModel
-from utils import get_corpus
+from gensim.corpora import Dictionary
+from DataHandler.utils import get_corpus
 
 
 def train_n_gram(data, n):
@@ -31,7 +32,9 @@ def train_tfidf(data):
     :param data: data
     :return: trained TF-IDF model
     """
-    corpus = get_corpus(data)
+    dct = Dictionary(data)
+    corpus = [dct.doc2bow(line) for line in data]
+    print(corpus)
     model = TfidfModel(corpus)
 
     return model
@@ -61,3 +64,7 @@ def transfer_word2vec(trained_model, corpus):
                                  epochs=trained_model.epochs)
     print("Complete train")
     return result
+
+
+if __name__ == '__main__':
+    pass

@@ -1,8 +1,10 @@
-import pickle
 from DataHandler.utils import apply_by_multiprocessor
 from sklearn.feature_extraction.text import TfidfVectorizer
-import numpy as np
+from Comparing.Similarity import cos_similarity
+from Vectorization.train import train
 
+import numpy as np
+import pickle
 
 file = 'news.pickle'
 
@@ -26,14 +28,6 @@ def get_data(data_path):
     return total_title, total_sum
 
 
-# Calculate cosine similarity between one summarization(v1) and all of the titles(v2)
-def cos_similarity(v1, v2):
-    dot_product = np.dot(v1, v2)
-    l2_norm = (np.sqrt(sum(np.square(v1))) * np.sqrt(sum(np.square(v2))))
-    similarity = dot_product / l2_norm
-    return similarity
-
-
 # Select title from summarizes
 def extract_title(data):
     index = data[0]
@@ -50,16 +44,16 @@ def extract_title(data):
     cur_total = [cur_total[j] for j in range(len(cur_total)) if j != index]
     
     total_size = len(total_title) - 1
-    
-    tfidf_vect_simple = TfidfVectorizer()
-    feature_vect_simple_total = tfidf_vect_simple.fit_transform(cur_total)
-    feature_vect_dense_total = feature_vect_simple_total.todense()
-    total_dense = feature_vect_dense_total[:total_size]
+
+    tfidf_vec_simple = TfidfVectorizer()
+    feature_vec_simple_total = tfidf_vec_simple.fit_transform(cur_total)
+    feature_vec_dense_total = feature_vec_simple_total.todense()
+    total_dense = feature_vec_dense_total[:total_size]
     total_mat = np.array(total_dense).T
     
     for i in range(len(summarizes)):
-        vect_summarize = np.array(feature_vect_dense_total[total_size + i]).reshape(-1,)
-        similarities = cos_similarity(vect_summarize, total_mat)
+        vec_summarize = np.array(feature_vec_dense_total[total_size + i]).reshape(-1,)
+        similarities = cos_similarity(vec_summarize, total_mat)
         similarity_simple.append(np.max(similarities))
         similarity_index.append(list(similarities).index(np.max(similarities)))
     similarity_max = max(similarity_simple)
