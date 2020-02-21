@@ -18,7 +18,7 @@ class TextPreProcessor(object):
         """
         stop_words = []
 
-        with open('./한국어불용어100.txt', 'r', encoding='utf-8-sig') as f:
+        with open('/Users/hongnadan/PycharmProjects/Generate-HeadLine/TextPreprocessing/한국어불용어100.txt', 'r', encoding='utf-8-sig') as f:
             while True:
                 a = f.readline()
                 if a:
@@ -76,7 +76,7 @@ class TextPreProcessor(object):
 
         # 3. 불용어 제거
         if remove_stopwords:
-            words = [w for w in words if not w in stop_words]
+            words = [w for w in words if w not in stop_words]
 
         # 4. 리스트 형태로 반환
         return words
@@ -160,18 +160,19 @@ class TextPreProcessor(object):
     @staticmethod
     def apply_by_multiprocessing(data: list, func, **kwargs) -> list:
         # 키워드 파라메터를 꺼냄
-        workers = kwargs.pop('workers')
-        tokenizer = kwargs.pop("tokenizer")
-        stopwords = kwargs.pop("stopwords")
 
+        workers = kwargs.pop('workers')
         pool = Pool(processes=workers)
 
-        if type(tokenizer) == str and stopwords:
-            func = partial(func, tokenizer=tokenizer, remove_stopwords=stopwords)
-        elif type(tokenizer) == str:
+        if "tokenizer" in kwargs.keys():
+            tokenizer = kwargs.pop("tokenizer")
             func = partial(func, tokenizer=tokenizer)
-        elif stopwords:
+        if "stopwords" in kwargs.keys():
+            stopwords = kwargs.pop("stopwords")
             func = partial(func, remove_stopwords=stopwords)
+        if "pos_presence" in kwargs.keys():
+            pos_presence = kwargs.pop("pos_presence")
+            func = partial(func, pos_presence=pos_presence)
 
         result = pool.map(func, data)
         pool.close()

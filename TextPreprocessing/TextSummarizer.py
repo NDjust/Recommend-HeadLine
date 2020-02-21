@@ -87,23 +87,27 @@ class TextRank:
         self.rank = Rank()
         self.sent_rank_idx = self.rank.get_ranks(self.sent_graph)
         self.sorted_sent_rank_idx = sorted(self.sent_rank_idx, key=lambda k:
-        self.sent_rank_idx[k], reverse=True)
+                                self.sent_rank_idx[k], reverse=True)
 
         self.word_rank_idx = self.rank.get_ranks(self.words_graph)
         self.sorted_word_rank_idx = sorted(self.word_rank_idx, key=lambda k:
-        self.word_rank_idx[k], reverse=True)
+                                self.word_rank_idx[k], reverse=True)
 
     def summarize(self, sent_num=5):
         summary = []
         index = []
+        weight = []
+
         for idx in self.sorted_sent_rank_idx[:sent_num]:
             index.append(idx)
 
-        index.sort()
         for idx in index:
             summary.append(self.sentences[idx])
 
-        return summary
+        for idx in range(len(index)):
+            weight.append(self.sent_rank_idx[index[idx]])
+
+        return summary, weight
 
     def keywords(self, word_num):
         rank_idx = self.rank.get_ranks(self.words_graph)
