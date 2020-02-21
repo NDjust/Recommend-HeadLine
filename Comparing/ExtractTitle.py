@@ -1,5 +1,5 @@
 import pickle
-from multiprocessing import Pool
+from DataHandler.utils import apply_by_multiprocessor
 from sklearn.feature_extraction.text import TfidfVectorizer
 import numpy as np
 
@@ -12,7 +12,7 @@ def get_data(data_path):
     data = pickle.load(open(data_path, 'rb'))
         
     total_sum = []
-    total_title =[]
+    total_title = []
     
     for row in range(len(data)):
         if data[row] is None:
@@ -32,19 +32,6 @@ def cos_similarity(v1, v2):
     l2_norm = (np.sqrt(sum(np.square(v1))) * np.sqrt(sum(np.square(v2))))
     similarity = dot_product / l2_norm
     return similarity
-
-
-# Use for increasing speed
-def apply_by_multiprocessor(data, func, **kwargs):
-    print("Start Multiprocessing")
-
-    workers = kwargs.pop("workers")
-    pool = Pool(processes=workers)
-    result = pool.map(func, data)
-    pool.close()
-    pool.join()
-
-    return result
 
 
 # Select title from summarizes
@@ -89,7 +76,7 @@ def main():
     print('start')
     total_title, total_sum = get_data(file)
     data = [(i, total_title, total_sum) for i in range(len(total_title))]
-    result = apply_by_multiprocessor(data = data, func = extract_title, workers = 6)
+    result = apply_by_multiprocessor(data=data, func=extract_title, workers=6)
     print('end')
     
     pickle.dump(result, open('result.pkl', 'wb'))

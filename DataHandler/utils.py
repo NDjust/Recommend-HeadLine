@@ -1,17 +1,60 @@
 from multiprocessing import Pool
 from functools import partial
-from TextSummarizer import TextRank
+from TextPreprocessing.TextSummarizer import TextRank
 from TextPreprocessing.preprocessor import TextPreProcessor
 
+from DataHandler.MysqlHandler import MysqlHandler
+
+import pandas as pd
 import re
 import pickle
 
 
-def clean_text(data):
-    # 텍스트에 포함되어 있는 특수 문자 제거
-    text = re.sub('["\'“”‘’◆▲★●■◀▼▶]', '', data)
+def get_clean_df(sql: str, handler: MysqlHandler) -> pd.DataFrame:
+    with handler:
+        print("Load data in mysql")
+        df = handler.mysql_to_df(sql)
 
-    return text
+    if df is None:
+        return None
+
+    df = df.dropna()
+
+    return df
+
+
+def handle_pickle(file_name_path, data=None, is_save=False):
+    if is_save:
+        print("Save Data to Pickle")
+        with open(file_name_path, mode="wb") as f:
+            pickle.dump(data, f)
+
+        return None
+    else:
+        with open(file_name_path, mode="rb") as f:
+            data = pickle.load(f)
+
+        return data
+
+
+def save_data(data: list, path=None) -> list:
+    """ Save title, content, summary sentences data.
+
+    :param data: input data (title, content)
+    :param path: save path
+    :return: [title, content, summary_sentences] data
+    """
+
+    title = data[0]
+    content = data[1]
+
+    data = [[title[i], content[i]] for i in range(len(data)) if i != 6140]
+    result = apply_by_multiprocessor(data=data, func=add_summary_sentence, workers=4)
+
+    with open(path, mode="wb") as f:
+        pickle.dump(result, f)
+
+    return result
 
 
 def add_summary_sentence(data) -> list:
@@ -22,8 +65,9 @@ def add_summary_sentence(data) -> list:
     """
     title = data[0]
     content = data[1]
-    content = clean_text(content)
+    content = re.sub('["\'“”‘’◆▲★●■◀▼▶]', '', content)
 
+    # except Wrong value contents.
     try:
         sum = TextRank(content).summarize(5)
     except:
@@ -80,8 +124,7 @@ def apply_by_multiprocessor(data, func, **kwargs):
 def make_dict(data, save=False, path=None):
     """ Make dictionary.
 
-    :param handler: MySql Handler
-    :param sql: sql query
+    :param data : input data.
     :param save: save existence.
     :param path: save path
     :return: data word dictionary

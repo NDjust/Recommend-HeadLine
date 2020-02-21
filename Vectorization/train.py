@@ -1,8 +1,7 @@
-from gensim.models import Word2Vec
-from TextPreprocessing.MysqlHandler import MysqlHandler
-from utils import get_data, get_corpus
-from Vectorizer import train_word2vec, transfer_word2vec
-from Vectorizer import load_model, train_n_gram, train_tfidf
+from DataHandler.MysqlHandler import MysqlHandler
+from DataHandler.utils import get_data, get_corpus
+from Vectorization.Vectorizer import train_word2vec, transfer_word2vec
+from Vectorization.Vectorizer import load_model, train_n_gram, train_tfidf
 
 
 def train(data, method="word2vec", n=None, transfer=False, save=False, path=None):
@@ -22,9 +21,9 @@ def train(data, method="word2vec", n=None, transfer=False, save=False, path=None
     for d in data:
         total_corpus += get_corpus(d)
 
-    if method == "tfidf":
+    if method.lower() == "tfidf":
         trained_model = train_tfidf(data)
-    elif method == "ngram":
+    elif method.lower() == "ngram":
         if n is not None:
             trained_model = train_n_gram(data, n)
         else:

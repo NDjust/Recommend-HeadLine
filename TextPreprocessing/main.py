@@ -1,6 +1,7 @@
-from MysqlHandler import MysqlHandler
-from utils import get_clean_df, handle_pickle, fit_processor
-from preprocessor import TextPreProcessor
+from DataHandler.MysqlHandler import MysqlHandler
+from DataHandler.utils import get_clean_df, handle_pickle
+from TextPreprocessing.preprocessor import TextPreProcessor
+import numpy as np
 
 HOST = ""
 USER = ""
@@ -9,6 +10,20 @@ PORT = 0
 
 DB_TABLE_1 = ""
 DB_TABLE_2 = ""
+
+
+def fit_processor(data, func, **kwargs) -> list:
+    # convert data type
+    data = list(np.asarray(data))
+    print("Cleansing Text data")
+
+    # preprocessing by us multiprocessing
+    data = TextPreProcessor.apply_by_multiprocessing(
+        data=data, func=func, tokenizer=kwargs.pop('tokenizer'),
+        stopwords=kwargs.pop("stopwords"), workers=kwargs.pop("workers")
+    )
+
+    return data
 
 
 def main():
