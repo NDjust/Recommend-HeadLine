@@ -7,7 +7,7 @@
 
 ## 📖 Introduction  
 글을 작성하는 사람은 Headline을 만들 때, 다른 사람의 이목을 끄는 Headline을 선정하거나  
-정보 전달이 명확한 Headline을 선정하는 등 작성자는 글의 취지에 맞게 Headline을 선정하게 됩니다.  
+정보 전달이 명확한 Headline을 선정하는 등 글의 취지에 맞게 Headline을 선정하게 됩니다.  
   
 '첫 문장은 제목이다'라는 말처럼 Headline을 잘 만드는 것이 중요해지고 있습니다.  
   
