@@ -71,7 +71,18 @@
 ```
 
 ## 💻 System requirements
-
+- beautifulsoup4==4.6.0
+- gensim==3.8.0
+- jpype1==0.7.1
+- konlpy==0.5.2
+- numpy==1.18.1
+- pandas==0.25.3
+- pymysql==0.9.3
+- requests==2.22.0
+- scikit-learn==0.22.1
+- selenium==3.141.0
+- textdistance==4.1.3
+- tqdm==4.42.1
 
 
 
