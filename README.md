@@ -90,6 +90,9 @@
 - textdistance==4.1.3
 - tqdm==4.42.1
 ```
+## 📋 Progress
+![image](https://user-images.githubusercontent.com/53163934/75092584-83b34d00-55bc-11ea-958e-796d4f77e542.png)
+
 ## 💻 Getting Started (Installation)
 ```
 pip3 install -r requirements.txt
