@@ -61,7 +61,7 @@
   |
   |-.gitignore                               
   |
-  |-LINCENSE                              
+  |-LICENSE                              
   |
   |-README.md                           # 해당 문서
   |
