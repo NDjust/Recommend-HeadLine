@@ -15,7 +15,7 @@
 우리는 Headline을 작성하는 사람들의 부담을 덜어주고자 해당 프로젝트를 진행하게 되었습니다.  
 
 ## 👍 Expected effect
-![image](https://user-images.githubusercontent.com/53163934/75092303-9c6e3380-55b9-11ea-9379-3b6d42a15ba9.png)
+![image](https://user-images.githubusercontent.com/53163934/75092731-0ab4f500-55be-11ea-9136-5b2428cee341.png)
 
   
 ## ✋ Participation Member
@@ -91,7 +91,7 @@
 - tqdm==4.42.1
 ```
 ## 📋 Progress
-![image](https://user-images.githubusercontent.com/53163934/75092584-83b34d00-55bc-11ea-958e-796d4f77e542.png)
+![image](https://user-images.githubusercontent.com/53163934/75092723-f7a22500-55bd-11ea-9bd8-fc5f9b8b3108.png)
 
 ## 💻 Getting Started (Installation)
 ```
