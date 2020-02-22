@@ -1,30 +1,28 @@
-from DataHandler.utils import apply_by_multiprocessor
+from DataHandler.utils import apply_by_multiprocessor, save_data
 from sklearn.feature_extraction.text import TfidfVectorizer
 from Comparing.Similarity import cos_similarity
-from Vectorization.train import train
 
 import numpy as np
 import pickle
 
-file = 'news.pickle'
+DATA_PATH = 'TextPreprocessing/clean_editorial.pkl'
 
 
 # Get summarized data and original title from article
-def get_data(data_path):
+def get_data(data_path='clean_untitled.pkl'):
     data = pickle.load(open(data_path, 'rb'))
-        
+
     total_sum = []
     total_title = []
-    
+
     for row in range(len(data)):
         if data[row] is None:
             continue
-
         if data[row][0] in total_title:
             continue
         total_title.append(data[row][0])
         total_sum.append(data[row][2])
-        
+
     return total_title, total_sum
 
 
@@ -34,45 +32,58 @@ def extract_title(data):
     total_title = data[1]
     total_sum = data[2]
     print(index)
-    
-    summarizes = total_sum[index]
+
+    cur_sum = total_sum[index]
+    summarizes = cur_sum[0]
+    sum_importance = cur_sum[1]
     title = total_title[index]
-    similarity_simple = []
-    similarity_index = []
+    sum_similarity = []
+    similar_title_index = []
     cur_total = total_title + summarizes
-    
+
     cur_total = [cur_total[j] for j in range(len(cur_total)) if j != index]
-    
+
     total_size = len(total_title) - 1
 
-    tfidf_vec_simple = TfidfVectorizer()
-    feature_vec_simple_total = tfidf_vec_simple.fit_transform(cur_total)
-    feature_vec_dense_total = feature_vec_simple_total.todense()
-    total_dense = feature_vec_dense_total[:total_size]
+    tfidf_vect_simple = TfidfVectorizer()
+    feature_vect_simple_total = tfidf_vect_simple.fit_transform(cur_total)
+    feature_vect_dense_total = feature_vect_simple_total.todense()
+    total_dense = feature_vect_dense_total[:total_size]
     total_mat = np.array(total_dense).T
-    
+
     for i in range(len(summarizes)):
-        vec_summarize = np.array(feature_vec_dense_total[total_size + i]).reshape(-1,)
-        similarities = cos_similarity(vec_summarize, total_mat)
-        similarity_simple.append(np.max(similarities))
-        similarity_index.append(list(similarities).index(np.max(similarities)))
-    similarity_max = max(similarity_simple)
-    summarized_index = similarity_simple.index(similarity_max)
-    
-    return {'max_similarity': similarity_max, 
-            'title_origin': title, 
-            'title_selected': summarizes[summarized_index], 
-            'index_of_selected': summarized_index,
-            'summarizes': summarizes}
+        vect_summarize = np.array(feature_vect_dense_total[total_size + i]).reshape(-1, )
+        similarities = cos_similarity(vect_summarize, total_mat)
+        sum_similarity.append(np.max(similarities))
+        similar_title_index.append(list(similarities).index(np.max(similarities)))
+
+    sum_importance = [i / sum(sum_importance) for i in sum_importance]
+    sum_similarity = [i / sum(sum_similarity) for i in sum_similarity]
+    sum_weight = [sum_importance[i] + sum_similarity[i] for i in range(len(summarizes))]
+
+    sorted_index = sorted(range(len(summarizes)), key=lambda i: sum_weight[i], reverse=True)
+    sorted_importance = [sum_importance[i] for i in sorted_index]
+    sorted_similarity = [sum_similarity[i] for i in sorted_index]
+    sorted_weight = [sum_weight[i] for i in sorted_index]
+    sorted_summary = [summarizes[i] for i in sorted_index]
+    similar_titles = [cur_total[similar_title_index[i]] for i in sorted_index]
+
+    return {'title_origin': title,
+            'order_by_weight': sorted_index,
+            'sorted_similarity': sorted_similarity,
+            'sorted_importance': sorted_importance,
+            'sorted_weight': sorted_weight,
+            'sorted_summary': sorted_summary,
+            'similar_titles': similar_titles}
 
 
 def main():
     print('start')
-    total_title, total_sum = get_data(file)
+    total_title, total_sum = get_data(DATA_PATH)
     data = [(i, total_title, total_sum) for i in range(len(total_title))]
-    result = apply_by_multiprocessor(data=data, func=extract_title, workers=6)
+    result = apply_by_multiprocessor(data=data, func=extract_title)
     print('end')
-    
+
     pickle.dump(result, open('result.pkl', 'wb'))
 
 
