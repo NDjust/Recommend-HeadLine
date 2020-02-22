@@ -27,7 +27,7 @@
 ## 👬 Role
 - Data Engineering : 홍나단, 박규훤  
 - Data Analysis : 박성아, 한예찬  
-- Modeling : All  
+- Problem Solving : All  
 
 ## 📂 Directory structure
 ``` 
@@ -58,7 +58,7 @@
   |  |-preprocessing.py                 # 토큰화, 품사 태깅 해주는 코드
   |  |-main.py                          # 전처리 실행 해주는 코드
   |  |-stopword.txt                     # 불용어 목록
-  |  |-한국어불용어100.txt               # 한국어 불용어 목록
+  |  |-한국어불용어100.txt                 # 한국어 불용어 목록
   |
   |-Vectorization
   |  |-Vectorizer.py                    # 벡터화 모델 세팅하는 코드
