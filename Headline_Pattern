@@ -1,0 +1,80 @@
+#!/usr/bin/env python
+# coding: utf-8
+import os
+import pandas as pd
+import pickle
+import numpy as np
+import glob
+
+# 경로 설정
+os.chdir(r'C:\Users\student\Desktop\박성아\kpmg\data\politics_2years_2019_2018')
+
+files = glob.glob('clean_*')
+total = []
+for file in files:
+    with open(file, 'rb') as f:
+        data = pickle.load(f)
+    total.append(data)
+
+from functools import reduce
+
+data = list(reduce(lambda x, y: x+y, total))
+
+# 품사만 추출
+for row in range(len(data)):
+    append_data = []
+    for word, punc in data[row][0]:
+        append_data.append(punc)
+    data[row][0] = append_data
+
+    del data[row][1]
+
+# 이중리스트를 1차원으로 변환
+data2 = np.array(data).flatten().tolist()
+
+# n-gram 생성하는 함수 생성
+def to_ngrams(words, n):
+    ngrams = []
+    for b in range(0, len(words) - n + 1):
+        ngrams.append(tuple(words[b:b+n]))
+    return ngrams
+
+# 리스트마다 적용하기
+a=[]
+for i in range(len(data2)):
+    a.append(to_ngrams(data2[i],4))    # n개수 설정
+
+# 리스트를 string으로 변환하여 각 n-gram별로 구조 빈도 파악
+a2 = ''.join(map(str,a))
+a3 = a2.split('(')
+
+df = pd.DataFrame(a3,columns=['punc'])
+
+df['punc'] = df['punc'].str.replace(')','')
+df['punc'] = df['punc'].str.replace(']','')
+df['punc'] = df['punc'].str.replace('[','')
+df['punc'] = df['punc'].str.replace(',','')
+
+df = df.drop([0])
+df = df.reset_index()
+
+abc = df['punc'].value_counts()
+abc2 = pd.DataFrame(abc).reset_index()
+abc2.columns = [['문장구조_n-gram','punc수']]
+
+abc2.to_csv('check_punc_enter4.csv',encoding='cp949')
+
+
+# 최소 문장 형태소 수 파악
+a = []
+for i in range(len(data3)):
+    a.append(len(data3[0][i]))
+
+min(a)  # noun 4개
+
+a = pd.DataFrame(a)
+a.shape
+
+tot = pd.concat([data3,a],axis=1)
+tot.rename = ['품사','개수']
+tot.to_csv('확인본.csv',encoding='cp949')
