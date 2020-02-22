@@ -3,7 +3,7 @@
 [![code](https://img.shields.io/badge/Code-Python3.7-blue)](https://docs.python.org/3/license.html)
 [![data](https://img.shields.io/badge/Data-news-blueviolet)](https://news.chosun.com/ranking/list.html)
 [![member](https://img.shields.io/badge/Project-Member-brightgreen)](https://github.com/NDjust/Generate-HeadLine/blob/Feature_README/README.md#participation-member)
-[![database](https://img.shields.io/badge/Database-MySQL-orange)](https://www.mysql.com/downloads/)
+[![DBMS](https://img.shields.io/badge/DBMS-MySQL-orange)](https://www.mysql.com/downloads/)
 > Text-mining을 통해 Content에 대한 Headline을 추천해주는 프로젝트
 
 ## 📖 Introduction  
