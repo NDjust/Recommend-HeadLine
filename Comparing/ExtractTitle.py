@@ -1,16 +1,16 @@
 from DataHandler.utils import apply_by_multiprocessor, save_data
 from sklearn.feature_extraction.text import TfidfVectorizer
 from Comparing.Similarity import cos_similarity
+from DataHandler import ConfigHandler
 
 import numpy as np
 import pickle
-
-DATA_PATH = 'TextPreprocessing/clean_editorial.pkl'
+import json
 
 
 # Get summarized data and original title from article
-def get_data(data_path='clean_untitled.pkl'):
-    data = pickle.load(open(data_path, 'rb'))
+def get_data(conf=None):
+    data = pickle.load(open('clean_' + '{}.pkl'.format(conf['table']), 'rb'))
 
     total_sum = []
     total_title = []
@@ -78,13 +78,12 @@ def extract_title(data):
 
 
 def main():
-    print('start')
-    total_title, total_sum = get_data(DATA_PATH)
+    config = ConfigHandler.loadFromFile()
+    total_title, total_sum = get_data(config)
     data = [(i, total_title, total_sum) for i in range(len(total_title))]
     result = apply_by_multiprocessor(data=data, func=extract_title)
-    print('end')
 
-    pickle.dump(result, open('result.pkl', 'wb'))
+    json.dump(result, open('result.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=4)
 
 
 if __name__ == '__main__':

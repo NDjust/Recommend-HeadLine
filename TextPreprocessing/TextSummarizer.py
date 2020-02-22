@@ -12,7 +12,7 @@ class SentenceTokenizer:
     def __init__(self):
         self.twitter = Okt()
         self.kkma = Kkma()
-        f = open("stopword.txt", "rb")
+        f = open("TextPreprocessing/stopword.txt", "rb")
         self.stopwords = pickle.load(f)
         f.close()
 
