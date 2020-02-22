@@ -13,23 +13,34 @@ if __name__ == '__main__':
         exit()
 
     print('Select your purpose: ')
-    print('1. Preprocess data')
-    print('2. Extract title')
-    print('3. Quit')
+    print('1. Prepare title data')
+    print('2. Preprocess content data')
+    print('3. Extract title without original title')
+    print('4. Preprocess title and content pair data')
+    print('5. Extract title from contents with origin title')
+    print('6. Quit')
 
     purpose = input('Purpose: ')
-    if purpose.strip() not in ['1', '2', '3']:
+    if purpose.strip() not in ['1', '2', '3', '4', '5', '6']:
         print('Please check your selection.')
         exit()
 
     purpose = int(purpose.strip())
     if purpose == 1:
+        from TextPreprocessing.main import get_titles
+        get_titles()
+    elif purpose == 2:
+        from TextPreprocessing.main import get_summarizes, clean_summarizes
+        get_summarizes()
+        clean_summarizes()
+    elif purpose == 3:
+        from Comparing.ExtractTitle import extract_from_given_title
+        extract_from_given_title()
+    elif purpose == 4:
         from TextPreprocessing.main import main
         main()
-        pass
-    elif purpose == 2:
-        from Comparing.ExtractTitle import main
-        main()
-        pass
+    elif purpose == 5:
+        from Comparing.ExtractTitle import extract_from_origin_title
+        extract_from_origin_title()
     else:
         exit()
