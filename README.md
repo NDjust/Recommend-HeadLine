@@ -14,7 +14,7 @@
   
 우리는 Headline을 작성하는 사람들의 부담을 덜어주고자 해당 프로젝트를 진행하게 되었습니다.  
 
-## 👍 기대 효과
+## 👍 Expected effect
 ![image](https://user-images.githubusercontent.com/53163934/75092303-9c6e3380-55b9-11ea-9379-3b6d42a15ba9.png)
 
   
@@ -121,5 +121,5 @@ python run.py
 > 5. (헤드라인, 본문) 데이터로부터 본문의 헤드라인 추출 -> .result.json  
 > 6. 나가기  
 
-## RESULT
+## 🔍 RESULT
 ![image](https://user-images.githubusercontent.com/53163934/75092254-3ed9e700-55b9-11ea-9060-6f8052b989dc.png)
