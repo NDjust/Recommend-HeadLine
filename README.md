@@ -15,7 +15,7 @@
 우리는 Headline을 작성하는 사람들의 부담을 덜어주고자 해당 프로젝트를 진행하게 되었습니다.  
 
 ## 👍 Expected effect
-![image](https://user-images.githubusercontent.com/53163934/75092731-0ab4f500-55be-11ea-9136-5b2428cee341.png)
+![image](https://user-images.githubusercontent.com/53163934/75092774-ad6d7380-55be-11ea-8a09-26610aec6ca9.png)
 
   
 ## ✋ Participation Member
