@@ -1,12 +1,128 @@
-### Generate Headline 
----
+# Headline Recommend (KPMG)
+[![license](https://img.shields.io/badge/License-AGPL-red)](https://github.com/NDjust/Generate-HeadLine/blob/master/LICENSE)
+[![code](https://img.shields.io/badge/Code-Python3.7-blue)](https://docs.python.org/3/license.html)
+[![data](https://img.shields.io/badge/Data-news-blueviolet)](https://news.chosun.com/ranking/list.html)
+[![member](https://img.shields.io/badge/Project-Member-brightgreen)](https://github.com/NDjust/Generate-HeadLine/blob/Feature_README/README.md#participation-member)
+[![DBMS](https://img.shields.io/badge/DBMS-MySQL-orange)](https://www.mysql.com/downloads/)
+> Text-mining을 통해 Content에 대한 Headline을 추천해주는 프로젝트
 
+## 📖 Introduction  
+글을 작성하는 사람은 Headline을 만들 때, 다른 사람의 이목을 끄는 Headline을 선정하거나  
+정보 전달이 명확한 Headline을 선정하는 등 글의 취지에 맞게 Headline을 선정하게 됩니다.  
+  
+'첫 문장은 제목이다'라는 말처럼 Headline을 잘 만드는 것이 중요해지고 있습니다.  
+  
+우리는 Headline을 작성하는 사람들의 부담을 덜어주고자 해당 프로젝트를 진행하게 되었습니다.  
 
+## 👍 Expected effect
+![image](https://user-images.githubusercontent.com/53163934/75092851-5fa53b00-55bf-11ea-9626-5b0f5c0bb846.png)
 
-Requirements
+  
+## ✋ Participation Member
+- 홍나단 : 010-6681-8139 [Team Leader]
+- 박성아 : 010-5619-9295  
+- 박규훤 : 010-6473-4049  
+- 한예찬 : 010-9042-1834  
 
-- pandas
-- selenium
-- bs4
-- pymysql
-- konlpy
+## 👬 Role
+- Data Engineering : 홍나단, 박규훤  
+- Data Analysis : 박성아, 한예찬  
+- Modeling : All  
+
+## 📂 Directory structure
+``` 
+  |-Analysis           
+  |  |-DataJoin.ipynb                   # 분리된 데이터 통합 코드
+  |  |-KewordSim.ipynb                  # 제목과 본문간의 단어 유사도 측정 코드
+  |  |-NounExtrac.ipynb                 # 명사 추출 코드
+  |  |-SentSimPre.ipynb                 # 문장 유사도 전처리 코드
+  |  |-TextRank.ipynb                   # TextRank를 이용한 키워드 추출 코드
+  |
+  |-Comparing
+  |  |-ExtractTitle.py                  # 유사도 비교 후 문장 추천해주는 코드
+  |  |-Similarity.py                    # Cosine 유사도 구해주는 코드
+  |
+  |-Crawler 
+  |  |-Crawling.py                      # 조선일보 크롤링 해주는 코드
+  |  |-CrawlingTester.py                # 크롤링 테스트 코드                         
+  |  |-TestDBconnector.py               # DB 연결 테스트 코드
+  |  |-main.py                          # 크롤링 실행 코드
+  |  |-saver.py                         # DB or CSV로 저장해주는 코드
+  |
+  |-DataHandler
+  |  |-MysqlHandler.py                  # Mysql에서 데이터를 가져오는 코드
+  |  |-utils.py                         # 데이터 처리하는 코드
+  |
+  |-TextPreprocessing 
+  |  |-TextSummarizer.py                # 문장요약해주는 코드
+  |  |-preprocessing.py                 # 토큰화, 품사 태깅 해주는 코드
+  |  |-main.py                          # 전처리 실행 해주는 코드
+  |  |-stopword.txt                     # 불용어 목록
+  |  |-한국어불용어100.txt               # 한국어 불용어 목록
+  |
+  |-Vectorization
+  |  |-Vectorizer.py                    # 벡터화 모델 세팅하는 코드
+  |  |-train.py                         # 모델 학습시키는 코드
+  |
+  |-.gitignore                               
+  |
+  |-LICENSE                              
+  |
+  |-README.md                           # 해당 문서
+  |
+  |-requirements.txt                    # 사전 설치 목록
+  |
+  |-run.py                              # 프로젝트를 실행해주는 파일
+```
+
+## 🌐 Dependency Build Instructions
+```
+- beautifulsoup4==4.6.0
+- gensim==3.8.0
+- jpype1==0.7.1
+- konlpy==0.5.2
+- numpy==1.18.1
+- pandas==0.25.3
+- pymysql==0.9.3
+- requests==2.22.0
+- scikit-learn==0.22.1
+- selenium==3.141.0
+- textdistance==4.1.3
+- tqdm==4.42.1
+```
+## 📋 Progress
+![image](https://user-images.githubusercontent.com/53163934/75092723-f7a22500-55bd-11ea-9bd8-fc5f9b8b3108.png)
+
+## 💻 Getting Started (Installation)
+```
+pip3 install -r requirements.txt
+```
+### How to use
+```
+python run.py
+```
+- 최초 실행 : config.conf 파일 생성
+     - 수정 후 재실행 필요
+     
+> db_host: MySQL HOST 주소  
+db_user: MySQL 아이디  
+db_passwd: MySQL 패스워드   
+db_port: MySQL 포트  
+title_table: 학습할 헤드라인 테이블 (DB_NAME.TB_NAME)  
+title_column: 학습할 헤드라인의 column 명  
+content_table: 헤드라인 추출할 본문 테이블 (DB_NAME.TB_NAME)  
+content_column: 본문 내용의 column 명  
+  
+### config.conf 설정 후
+```
+python run.py
+```
+> 1. 헤드라인 데이터 준비  
+> 2. 본문 내용 전처리  
+> 3. 본문으로부터 헤드라인 추출 -> result.json  
+> 4. (헤드라인, 본문) 쌍의 데이터 전처리  
+> 5. (헤드라인, 본문) 데이터로부터 본문의 헤드라인 추출 -> result.json  
+> 6. 나가기  
+
+## 🔍 RESULT
+![image](https://user-images.githubusercontent.com/53163934/75092254-3ed9e700-55b9-11ea-9060-6f8052b989dc.png)
