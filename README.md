@@ -24,21 +24,50 @@
 - Data Analysis : 박성아, 한예찬  
 - Modeling : All  
 
-## 📂 Directory structure (예시)
+## 📂 Directory structure
 ``` 
-  |-Data           
-  |  |-Data.zip                              #데이터 파일
-  |  |-Data_Crawling.ipynb                   #데이터 크롤링 코드
-  |  |-stopword.txt                          #한국어 불용어 사전
+  |-Analysis           
+  |  |-DataJoin.ipynb                   # 분리된 데이터 통합 코드
+  |  |-KewordSim.ipynb                  # 제목과 본문간의 단어 유사도 측정 코드
+  |  |-NounExtrac.ipynb                 # 명사 추출 코드
+  |  |-SentSimPre.ipynb                 # 문장 유사도 전처리 코드
+  |  |-TextRank.ipynb                   # TextRank를 이용한 키워드 추출 코드
   |
-  |-Data Preprocessing    
-  |  |-NounExtraction.ipynb                  #명사를 추출하는 코드
-  |  |-TextRank.ipynb                        #TextRank 코드     
+  |-Comparing
+  |  |-ExtractTitle.py                  # 유사도 비교 후 문장 추천해주는 코드
+  |  |-Similarity.py                    # Cosine 유사도 구해주는 코드
   |
-  |-Data Analysis   
-  |  |-Similarity.ipynb                      #TextRank 알고리즘을 적용한 코드
+  |-Crawler 
+  |  |-Crawling.py                      # 조선일보 크롤링 해주는 코드
+  |  |-CrawlingTester.py                # 크롤링 테스트 코드                         
+  |  |-TestDBconnector.py               # DB 연결 테스트 코드
+  |  |-main.py                          # 크롤링 실행 코드
+  |  |-saver.py                         # DB or CSV로 저장해주는 코드
   |
-  |-README.md                                #이 문서
+  |-DataHandler
+  |  |-MysqlHandler.py                  # Mysql에서 데이터를 가져오는 코드
+  |  |-utils.py                         # 데이터 처리하는 코드
+  |
+  |-TextPreprocessing 
+  |  |-TextSummarizer.py                # 문장요약해주는 코드
+  |  |-preprocessing.py                 # 토큰화, 품사 태깅 해주는 코드
+  |  |-main.py                          # 전처리 실행 해주는 코드
+  |  |-stopword.txt                     # 불용어 목록
+  |  |-한국어불용어100.txt               # 한국어 불용어 목록
+  |
+  |-Vectorization
+  |  |-Vectorizer.py                    # 벡터화 모델 세팅하는 코드
+  |  |-train.py                         # 모델 학습시키는 코드
+  |
+  |-.gitignore                               
+  |
+  |-LINCENSE                              
+  |
+  |-README.md                           # 해당 문서
+  |
+  |-requirements.txt                    # 사전 설치 목록
+  |
+  |-run.py                              # 프로젝트를 실행해주는 파일
 ```
 
 ## 💻 System requirements
