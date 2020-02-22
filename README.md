@@ -71,7 +71,7 @@
   |-run.py                              # 프로젝트를 실행해주는 파일
 ```
 
-## 💻 System requirements
+## 🌐 Dependency Build Instructions
 ```
 pip install beautifulsoup4==4.6.0
 pip install gensim==3.8.0
