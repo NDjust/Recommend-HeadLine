@@ -106,7 +106,7 @@ title_column: 학습할 헤드라인의 column 명
 content_table: 헤드라인 추출할 본문 테이블 (DB_NAME.TB_NAME)  
 content_column: 본문 내용의 column 명  
   
-config.conf 설정 후
+### config.conf 설정 후
 ```
 python run.py
 ```
