@@ -15,7 +15,7 @@
 우리는 Headline을 작성하는 사람들의 부담을 덜어주고자 해당 프로젝트를 진행하게 되었습니다.  
   
 ## ✋ Participation Member
-- 홍나단 : 010-6681-8139  
+- 홍나단 : 010-6681-8139 [Team Leader]
 - 박성아 : 010-5619-9295  
 - 박규훤 : 010-6473-4049  
 - 한예찬 : 010-9042-1834  
@@ -72,19 +72,21 @@
 ```
 
 ## 💻 System requirements
-- beautifulsoup4==4.6.0
-- gensim==3.8.0
-- jpype1==0.7.1
-- konlpy==0.5.2
-- numpy==1.18.1
-- pandas==0.25.3
-- pymysql==0.9.3
-- requests==2.22.0
-- scikit-learn==0.22.1
-- selenium==3.141.0
-- textdistance==4.1.3
-- tqdm==4.42.1
-
+```
+pip install beautifulsoup4==4.6.0
+pip install gensim==3.8.0
+pip install jpype1==0.7.1
+pip install konlpy==0.5.2
+pip install numpy==1.18.1
+pip install pandas==0.25.3
+pip install pymysql==0.9.3
+pip install requests==2.22.0
+pip install scikit-learn==0.22.1
+pip install selenium==3.141.0
+pip install textdistance==4.1.3
+pip install tqdm==4.42.1
+```
+## ✏️ Getting Started
 
 
 
