@@ -1,3 +1,5 @@
+import os
+
 from gensim.models import Word2Vec, Phrases
 from gensim.models import TfidfModel
 from gensim.corpora import Dictionary
@@ -11,7 +13,7 @@ def train_n_gram(data, n):
         model = Word2Vec(
             sentences=bigram[data],
             size=100, window=5, min_count=1,
-            workers=4
+            workers=os.cpu_count()
         )
 
     else:
@@ -19,7 +21,7 @@ def train_n_gram(data, n):
         model = Word2Vec(
             sentences=trigram[bigram[data]],
             size=100, window=5, min_count=1,
-            workers=4
+            workers=os.cpu_count()
         )
 
     return model
@@ -49,7 +51,7 @@ def load_model(path):
 def train_word2vec(data):
     model = Word2Vec(sentences=data,
                      size=100, window=5,
-                     min_count=1, workers=4)
+                     min_count=1)
 
     return model
 

@@ -2,7 +2,7 @@ import os
 
 from selenium.common.exceptions import WebDriverException, TimeoutException
 from bs4 import BeautifulSoup
-from saver import *
+from Crawler.saver import *
 from selenium import webdriver
 from requests.exceptions import Timeout, RequestException
 from multiprocessing import Pool
@@ -43,9 +43,7 @@ def set_chrome_browser():
 
 
 def apply_multiprocessing(func, data, **kwargs) -> list:
-    workers = kwargs.pop("workers")
-
-    pool = Pool(processes=workers)
+    pool = Pool(processes=os.cpu_count())
     result = pool.map(func, data)
     pool.close()
 
@@ -110,7 +108,7 @@ def get_data(url):
         print(f"link: \n{link}\n")
 
     # 병렬처리
-    contents = apply_multiprocessing(get_content, article_link, workers=4)
+    contents = apply_multiprocessing(get_content, article_link)
 
     # convert views string to int
     views = list(map(lambda x: int("".join(x.split(","))), views))

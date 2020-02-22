@@ -163,8 +163,7 @@ class TextPreProcessor(object):
     def apply_by_multiprocessing(data: list, func, **kwargs) -> list:
         # 키워드 파라메터를 꺼냄
 
-        workers = kwargs.pop('workers')
-        pool = Pool(processes=workers)
+        pool = Pool(processes=os.cpu_count())
 
         if "tokenizer" in kwargs.keys():
             tokenizer = kwargs.pop("tokenizer")

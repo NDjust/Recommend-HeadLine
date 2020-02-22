@@ -49,8 +49,8 @@ def save_data(data: list, path=None) -> list:
     title = data[0]
     content = data[1]
 
-    data = [[title[i], content[i]] for i in range(len(data)) if i != 6140]
-    result = apply_by_multiprocessor(data=data, func=add_summary_sentence, workers=4)
+    data = [[title[i], content[i]] for i in range(len(data[0])) if i != 6140]
+    result = apply_by_multiprocessor(data=data, func=add_summary_sentence)
 
     with open(path, mode="wb") as f:
         pickle.dump(result, f)
@@ -71,7 +71,8 @@ def add_summary_sentence(data) -> list:
     # except Wrong value contents.
     try:
         sum = TextRank(content).summarize(5)
-    except:
+    except Exception as e:
+        print(e)
         return None
 
     return [title, content, sum]
@@ -100,7 +101,7 @@ def get_corpus(data: list) -> list:
 
     data = TextPreProcessor.apply_by_multiprocessing(
         func=TextPreProcessor.text_to_wordlist, data=data,
-        workers=4, stopwords=True, tokenizer="okt",
+        stopwords=True, tokenizer="okt",
         pos_presence=False
     )
 
@@ -114,8 +115,7 @@ def apply_by_multiprocessor(data, func, **kwargs):
         dic = kwargs.pop("dic")
         func = partial(func, dic=dic)
 
-    workers = kwargs.pop("workers")
-    pool = Pool(processes=workers)
+    pool = Pool(processes=os.cpu_count())
     result = pool.map(func, data)
     pool.close()
     pool.join()
@@ -135,7 +135,7 @@ def make_dict(data, save=False, path=None):
 
     data = TextPreProcessor.apply_by_multiprocessing(
         func=TextPreProcessor.text_to_wordlist, data=data,
-        workers=4, stopwords=True, tokenizer="okt"
+        stopwords=True, tokenizer="okt"
     )
 
     for li in data:
