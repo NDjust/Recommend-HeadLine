@@ -5,8 +5,9 @@ ATTR_LIST = [
     'db_user',
     'db_passwd',
     'db_port',
-    'table',
+    'title_table',
     'title_column',
+    'content_table',
     'content_column'
 ]
 

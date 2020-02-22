@@ -38,7 +38,7 @@ def handle_pickle(file_name_path, data=None, is_save=False):
         return data
 
 
-def save_data(data: list, path=None) -> list:
+def save_title_summarizes_pair(data: list, path=None) -> list:
     """ Save title, content, summary sentences data.
 
     :param data: input data (title, content)
@@ -50,6 +50,22 @@ def save_data(data: list, path=None) -> list:
     content = data[1]
 
     data = [[title[i], content[i]] for i in range(len(data[0])) if i != 6140]
+    result = apply_by_multiprocessor(data=data, func=add_title_summarizes_pair)
+
+    with open(path, mode="wb") as f:
+        pickle.dump(result, f)
+
+    return result
+
+
+def save_summarizes(data: list, path=None) -> list:
+    """ Save title, content, summary sentences data.
+
+    :param data: input data (content)
+    :param path: save path
+    :return: [title, content, summary_sentences] data
+    """
+
     result = apply_by_multiprocessor(data=data, func=add_summary_sentence)
 
     with open(path, mode="wb") as f:
@@ -58,9 +74,8 @@ def save_data(data: list, path=None) -> list:
     return result
 
 
-def add_summary_sentence(data) -> list:
+def add_title_summarizes_pair(data) -> list:
     """ add summary data.
-
     :param data: [title, content] list data
     :return: [title, content, summary_sentences] list data
     """
@@ -76,6 +91,24 @@ def add_summary_sentence(data) -> list:
         return None
 
     return [title, content, sum]
+
+
+def add_summary_sentence(data) -> list:
+    """ add summary data.
+
+    :param data: [title, content] list data
+    :return: [title, content, summary_sentences] list data
+    """
+    data = re.sub('["\'“”‘’◆▲★●■◀▼▶]', '', data)
+
+    # except Wrong value contents.
+    try:
+        sum = TextRank(data).summarize(5)
+    except Exception as e:
+        print(e) #TODO(REMOVE THIS LINE)
+        return None
+
+    return sum
 
 
 def get_data(data_handler, sql):
