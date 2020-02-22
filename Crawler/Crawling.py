@@ -1,3 +1,5 @@
+import os
+
 from selenium.common.exceptions import WebDriverException, TimeoutException
 from bs4 import BeautifulSoup
 from saver import *

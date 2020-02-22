@@ -8,6 +8,7 @@ from DataHandler.MysqlHandler import MysqlHandler
 import pandas as pd
 import re
 import pickle
+import os
 
 
 def get_clean_df(sql: str, handler: MysqlHandler) -> pd.DataFrame:

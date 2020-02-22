@@ -38,7 +38,7 @@ def save_db(table_name, title, date, views, article_link, content):
         print("\nSave data in DB")
 
         for i in range(len(title)):
-            sql = "insert into {} values(" \
+            sql = "insert into {} (title, created_date, views, link, content) values(" \
                   "%s, %s, %s, %s, %s)".format(table_name)
 
             cursor.execute(sql, (title[i], date, views[i], article_link[i], content[i]))

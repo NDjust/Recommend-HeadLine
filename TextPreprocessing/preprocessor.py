@@ -1,3 +1,5 @@
+import os
+
 from konlpy.tag import Okt, Kkma, Mecab, Hannanum
 from multiprocessing import Pool
 from functools import partial
