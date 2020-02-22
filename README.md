@@ -97,7 +97,7 @@ python run.py
 - 최초 실행 : config.conf 파일 생성
      - 수정 후 재실행 필요
      
-db_host: MySQL HOST 주소  
+> db_host: MySQL HOST 주소  
 db_user: MySQL 아이디  
 db_passwd: MySQL 패스워드   
 db_port: MySQL 포트  
@@ -110,9 +110,9 @@ config.conf 설정 후
 ```
 python run.py
 ```
-1. 헤드라인 데이터 준비
-2. 본문 내용 전처리
-3. 본문으로부터 헤드라인 추출 -> result.json
-4. (헤드라인, 본문) 쌍의 데이터 전처리
-5. (헤드라인, 본문) 데이터로부터 본문의 헤드라인 추출 -> .result.json
-6. 나가기
+> 1. 헤드라인 데이터 준비  
+2. 본문 내용 전처리  
+3. 본문으로부터 헤드라인 추출 -> result.json  
+4. (헤드라인, 본문) 쌍의 데이터 전처리  
+5. (헤드라인, 본문) 데이터로부터 본문의 헤드라인 추출 -> .result.json  
+6. 나가기  
