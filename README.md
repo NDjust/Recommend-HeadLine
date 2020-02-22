@@ -73,22 +73,46 @@
 
 ## 🌐 Dependency Build Instructions
 ```
-pip install beautifulsoup4==4.6.0
-pip install gensim==3.8.0
-pip install jpype1==0.7.1
-pip install konlpy==0.5.2
-pip install numpy==1.18.1
-pip install pandas==0.25.3
-pip install pymysql==0.9.3
-pip install requests==2.22.0
-pip install scikit-learn==0.22.1
-pip install selenium==3.141.0
-pip install textdistance==4.1.3
-pip install tqdm==4.42.1
+- beautifulsoup4==4.6.0
+- gensim==3.8.0
+- jpype1==0.7.1
+- konlpy==0.5.2
+- numpy==1.18.1
+- pandas==0.25.3
+- pymysql==0.9.3
+- requests==2.22.0
+- scikit-learn==0.22.1
+- selenium==3.141.0
+- textdistance==4.1.3
+- tqdm==4.42.1
 ```
-## ✏️ Getting Started
-
-
-
-
-
+## 💻 Getting Started (Installation)
+```
+pip3 install -r requirements.txt
+```
+### How to use
+```
+python run.py
+```
+- 최초 실행 : config.conf 파일 생성
+     - 수정 후 재실행 필요
+     
+db_host: MySQL HOST 주소  
+db_user: MySQL 아이디  
+db_passwd: MySQL 패스워드   
+db_port: MySQL 포트  
+title_table: 학습할 헤드라인 테이블 (DB_NAME.TB_NAME)  
+title_column: 학습할 헤드라인의 column 명  
+content_table: 헤드라인 추출할 본문 테이블 (DB_NAME.TB_NAME)  
+content_column: 본문 내용의 column 명  
+  
+config.conf 설정 후
+```
+python run.py
+```
+1. 헤드라인 데이터 준비
+2. 본문 내용 전처리
+3. 본문으로부터 헤드라인 추출 -> result.json
+4. (헤드라인, 본문) 쌍의 데이터 전처리
+5. (헤드라인, 본문) 데이터로부터 본문의 헤드라인 추출 -> .result.json
+6. 나가기
