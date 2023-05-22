@@ -5,7 +5,7 @@ konlpy==0.5.2
 numpy==1.18.1
 pandas==0.25.3
 pymysql==0.9.3
-requests==2.22.0
+requests==2.31.0
 scikit-learn==0.22.1
 selenium==3.141.0
 textdistance==4.1.3
